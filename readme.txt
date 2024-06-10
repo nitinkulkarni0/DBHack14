@@ -41,3 +41,13 @@ response = ChatCompletion.create(model="databricks-dbrx-instruct",
                                           {"role": "user","content": "Using the dataset bright_data_business_information_linkedin_listing.datasets.linked_in_people_profiles_dataset as a reference, explain me what it contains?"}],
                                 max_tokens=128)
 print(f"response.message:{response.message}")
+
+
+from databricks_genai_inference import Completion
+
+# Only required when running this example outside of a Databricks Notebook
+response = Completion.create(
+    model="databricks-mpt-30b-instruct",
+    prompt="You are an AI assistant and only use dataset bright_data_business_information_linkedin_listing.datasets.linked_in_company_information_datasets for answering any questions. Tell me matching profiles alongwith their names whose education is Computer Science",
+    max_tokens=128)
+print(f"response.text:{response.text:}")
