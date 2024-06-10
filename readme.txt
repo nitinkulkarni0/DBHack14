@@ -51,3 +51,39 @@ response = Completion.create(
     prompt="You are an AI assistant and only use dataset bright_data_business_information_linkedin_listing.datasets.linked_in_company_information_datasets for answering any questions. Tell me matching profiles alongwith their names whose education is Computer Science",
     max_tokens=128)
 print(f"response.text:{response.text:}")
+
+
+from pyspark.sql import SparkSession
+import pyspark.pandas as ps
+from databricks_genai_inference import Completion
+
+# Initialize SparkSession
+spark = SparkSession.builder.getOrCreate()
+
+# Read the table from Unity Catalog
+table_name = "bright_data_business_information_linkedin_listing.datasets.linked_in_company_information_datasets"
+df = spark.sql("SELECT * from bright_data_business_information_linkedin_listing.datasets.linked_in_people_profiles_datasets")
+
+# Convert the Spark DataFrame to a Pandas-on-Spark DataFrame
+pdf = df.toPandas()
+
+# Generate prompts using GenAI
+prompts = [
+    {"role": "system", "content": "You are an AI assistant who is helpful and polite"},
+    {"role": "user", "content": "Use the dataset and find relevant profiles based on inputs"},
+    {"role": "user", "content": "More Questions"},
+    {"role": "user", "content": "More Questions"}
+]
+
+for prompt in prompts:
+    # Use GenAI to generate results based on the prompt
+    response = Completion.create(
+        model="databricks-dbrx-instruct",
+        prompt=prompt["content"],  # Add prompt parameter
+        messages=[prompt],  # Convert prompt to a list
+        max_tokens=128
+    )
+    
+    # Display the prompt and generated result
+    print(f"Prompt: {prompt['content']}")
+    print(f"Generated Result: {response.choices[0].message['content']}\n")
