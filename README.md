@@ -29,10 +29,12 @@ These tables are designed to provide a rich dataset for analysis of professional
 
 Ask your question...
 
-
+```
 !pip install databricks-genai-inference
 %restart_python
+```
 
+```
 from databricks_genai_inference import ChatCompletion
 
 # Only required when running this example outside of a Databricks Notebook
@@ -54,8 +56,8 @@ response = Completion.create(
     prompt="You are an AI assistant and only use dataset bright_data_business_information_linkedin_listing.datasets.linked_in_company_information_datasets for answering any questions. Tell me matching profiles alongwith their names whose education is Computer Science",
     max_tokens=128)
 print(f"response.text:{response.text:}")
-
-
+```
+```
 from pyspark.sql import SparkSession
 import pyspark.pandas as ps
 from databricks_genai_inference import Completion
@@ -90,3 +92,4 @@ for prompt in prompts:
     # Display the prompt and generated result
     print(f"Prompt: {prompt['content']}")
     print(f"Generated Result: {response.choices[0].message['content']}\n")
+```
