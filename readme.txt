@@ -25,3 +25,19 @@ Other fields include image, logo, similar, sphere, url, type, updates, slogan, a
 These tables are designed to provide a rich dataset for analysis of professional profiles and company information on LinkedIn, useful for market research, recruitment, and competitive analysis.
 
 Ask your question...
+
+
+!pip install databricks-genai-inference
+%restart_python
+
+from databricks_genai_inference import ChatCompletion
+
+# Only required when running this example outside of a Databricks Notebook
+# export DATABRICKS_HOST="https://dbc-572950c6-e11a.cloud.databricks.com"
+# export DATABRICKS_TOKEN=""
+
+response = ChatCompletion.create(model="databricks-dbrx-instruct",
+                                messages=[{"role": "system", "content": "You are a helpful assistant and ensure you always respond politely and always use the datasets we have given as a base reference."},
+                                          {"role": "user","content": "Using the dataset bright_data_business_information_linkedin_listing.datasets.linked_in_people_profiles_dataset as a reference, explain me what it contains?"}],
+                                max_tokens=128)
+print(f"response.message:{response.message}")
