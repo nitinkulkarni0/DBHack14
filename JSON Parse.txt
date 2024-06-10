@@ -1,0 +1,12 @@
+from pyspark.sql.functions import col, get_json_object
+df = spark.sql("SELECT * FROM bright_data_business_information_linkedin_listing.datasets.linked_in_people_profiles_datasets")
+
+# JSON extracted using paths: https://goessner.net/articles/JsonPath/
+selected_field_df = (
+    df
+    .select(
+        get_json_object(col("experience"), "$[*]['description']").alias("description"),
+        get_json_object(col("experience"), "$[*]['title']").alias("title")
+    )
+)
+selected_field_df.display()
